@@ -1,14 +1,6 @@
 import numpy as np
 import csv
-
-X = np.array([[-1, -1], [-2, -1], [-3, -2], [1, 1], [2, 1], [3, 2]])
-Y = np.array([1, 1, 1, 2, 2, 2])
 from sklearn.naive_bayes import GaussianNB
-# clf = GaussianNB()
-# clf.fit(X, Y)
-
-# print(clf.predict([[-0.8, -1]]))
-
 
 def read_telemetry(fname):
     telemetry = []
@@ -32,7 +24,11 @@ def prep_data(telemetry):
     res=[]
     for line in telemetry:
         s, d, s_dot, d_dot = line
-        res.append([d, s_dot, d_dot])
+        if 2<d<6:
+            d-=4
+        elif d>6:
+            d-=8
+        res.append([d, d_dot])  # acc .848
     return res
 
 dataset_dir = './nd013_pred_data'
@@ -60,4 +56,3 @@ telemetry_test_prepped= prep_data(telemetry_test)
 acc= clf.score(telemetry_test_prepped, labels_test)
 
 print("Overall accuracy is",acc)
-
